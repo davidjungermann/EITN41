@@ -23,6 +23,14 @@ def validate_string(card_number):
     odd_digits = digits[-1::-2]
     even_digits = digits[-2::-2]
     
+    check = 0
+    check += sum(string_digit_conversion(odd_digits))
+
+    for digit in even_digits: 
+        check += sum(string_digit_conversion(digit * 2)) 
+    print(check % 10)
+    return check % 10
+    
     
     
 
