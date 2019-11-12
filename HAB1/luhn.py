@@ -8,11 +8,14 @@ def luhn():
 
     for line in lines:
         line = line[::-1]
-        line = line.strip()
-        chars = letter_slice(line, 2)
+        validate_string(line.strip())
                 
 def letter_slice(string, index):
     return string[::index]
+
+def validate_string(string):
+    chars = letter_slice(string, 2)
+    
 
 
 luhn()
