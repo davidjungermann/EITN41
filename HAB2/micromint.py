@@ -23,18 +23,15 @@ def create_bins():
 
 
 def calc_conf_int():
-    new_interval = 0
-    mean = numpy.mean(iteration_values)
-    std_dev = numpy.std(iteration_values)
-
-    h = lambda_value * (std_dev/math.sqrt(len(iteration_values)))
-    upper_bound = mean + h
-    lower_bound = mean - h
-
-    new_interval = upper_bound - lower_bound
+    h = lambda_value * (numpy.std(iteration_values) /
+                        math.sqrt(len(iteration_values)))
+                        
+    new_interval = (numpy.mean(iteration_values) + h) - \
+        (numpy.mean(iteration_values) - h)
 
     if new_interval == 0:
-        new_interval = interval_width + 1
+        new_interval = interval
+
     return int(new_interval)
 
 
