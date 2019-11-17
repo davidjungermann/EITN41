@@ -2,7 +2,6 @@
 
 import random as random
 import numpy as numpy
-import scipy.stats as stats
 import math as math
 
 c = int(input("Input the provided c: "))
@@ -12,8 +11,6 @@ interval_width = int(input("Input the provided confidence interval width: "))
 lambda_value = 3.66
 
 iteration_values = []
-upper_bound = 0
-lower_bound = 0
 interval = interval_width + 1
 
 
@@ -23,24 +20,6 @@ def get_exp():
 
 def create_bins():
     return [0] * get_exp()
-
-
-def generate_coins():
-    nbr_of_coins = 0
-    bins = create_bins()
-
-    i = 0
-    while True:
-        random_index = random.randint(0, len(bins)-1)
-        bins[random_index] += 1
-
-        if any(balls == k for balls in bins):
-            nbr_of_coins += 1
-            if nbr_of_coins == c:
-                print(int(nbr_of_coins))
-                break
-        i += 1
-    return i
 
 
 def calc_conf_int():
@@ -54,14 +33,33 @@ def calc_conf_int():
 
     new_interval = upper_bound - lower_bound
 
-    if new_interval != 0:
-        return new_interval
-    new_interval = interval_width + 1
+    if new_interval == 0:
+        new_interval = interval_width + 1
+    return int(new_interval)
+
+
+def generate_coins():
+    nbr_of_coins = 0
+    bins = create_bins()
+
+    i = 0
+    while True:
+        random_index = random.randint(0, len(bins)-1)
+        bins[random_index] += 1
+
+        if bins[random_index] == k:
+            nbr_of_coins += 1
+            if nbr_of_coins == c:
+                iteration_values.append(i)
+                break
+        i += 1
+
 
 def main(interval):
     while interval > interval_width:
+        generate_coins()
         interval = calc_conf_int()
     print(numpy.mean(iteration_values))
 
-main(interval)
 
+main(interval)
