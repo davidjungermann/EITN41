@@ -1,6 +1,6 @@
 # How many iterations (how many balls thrown) does it take before you generate c = 1, 100 and 10,000?
 
-import random
+import random as random
 
 c = int(input("Input the provided c: "))
 u = int(input("Input the provided u: "))
@@ -22,12 +22,13 @@ def generate_coins():
     bins = create_bins()
 
     while True:
-        bins[random.randint(0, get_exp())] += 1
+        random_index = random.randint(0,len(bins)-1)
+        bins[random_index] += 1
 
-        if any(balls > k for balls in bins):
+        if any(balls >= k for balls in bins):
             nbr_of_coins += 1
-            if nbr_of_coins > c:
-                print(bins)
+            if nbr_of_coins >= c:
+                print(nbr_of_coins)
                 break
 
 
