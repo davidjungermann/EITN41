@@ -56,7 +56,7 @@ def main(interval):
     while interval > interval_width:
         generate_coins()
         interval = calc_conf_int()
-        print("Working...")
+        print(interval)
     print(numpy.mean(iteration_values))
 
 
