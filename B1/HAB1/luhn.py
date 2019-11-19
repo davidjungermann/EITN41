@@ -19,7 +19,7 @@ def digit_calc(number):
 
 
 def read_cards():
-    f = open('testin.txt', "r")
+    f = open('test.txt', "r")
     lines = f.readlines()
     f.close
     return lines
