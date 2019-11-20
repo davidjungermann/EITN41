@@ -19,7 +19,7 @@ def main():
     merkle_root = tree[len(tree) - 1][0]
     route = calc_route(leaf_index, tree)
     string = str(route[len(tree) - path_depth - 1]) + merkle_root
-    print("The concatination of the specifed node and the Merkle root is: " + string)
+    print("The concatenation of the specified node and the Merkle root is: " + string)
 
 
 def build_tree(leaves):
@@ -48,7 +48,7 @@ def calc_route(leave_index, tree):
     index = leave_index
     route = []
     for i in range(len(tree) - 1):
-        if(index % 2 == 0):
+        if index % 2 == 0:
             if len(tree[i]) - 1 < index + 1:
                 route.append("R" + tree[i][index])
             else:
