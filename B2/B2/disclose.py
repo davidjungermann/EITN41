@@ -1,5 +1,8 @@
 from pcapfile import savefile
 
+subject_ip = input("Input the subject's IP address: ")
+mix_ip = input("Input the IP address of the mix: ")
+nbr_of_partners = int(input("Input the number of partners: "))
 
 def read_pcap():
     testcap = open('cia.log.1337.pcap', 'rb')
@@ -18,3 +21,4 @@ def read_pcap():
         print ('{}\t\t{}\t{}\t{}\t{}'.format(timestamp, eth_src, eth_dst, ip_src, ip_dst))
 
 read_pcap()
+
