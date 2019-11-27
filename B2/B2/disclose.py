@@ -1,5 +1,5 @@
 from pcapfile import savefile
-import ipaddress
+import gzip
 
 subject_ip = '159.237.13.37'
 mix_ip = '94.147.150.188'
@@ -26,6 +26,28 @@ def read_pcap():
         print('{}\t\t{}\t{}\t{}\t{}'.format(
             timestamp, eth_src, eth_dst, ip_src, ip_dst))
     return(packet_list)
+
+def zipped_read_pcap():
+    testcap = gzip.open(r'cia.log.1339.pcap.gz', 'rb')
+    capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
+
+    # print the packets
+    print('timestamp\teth src\t\t\teth dst\t\t\tIP src\t\tIP dst')
+    packet_list = []
+    for pkt in capfile.packets:
+        timestamp = pkt.timestamp
+        # all data is ASCII encoded (byte arrays). If we want to compare with strings
+        # we need to decode the byte arrays into UTF8 coded strings
+        packet_list.append({'ip_src': pkt.packet.payload.src.decode('UTF8'),
+                            'ip_dst': pkt.packet.payload.dst.decode('UTF8')})
+        eth_src = pkt.packet.src.decode('UTF8')
+        eth_dst = pkt.packet.dst.decode('UTF8')
+        ip_src = pkt.packet.payload.src.decode('UTF8')
+        ip_dst = pkt.packet.payload.dst.decode('UTF8')
+        print('{}\t\t{}\t{}\t{}\t{}'.format(
+            timestamp, eth_src, eth_dst, ip_src, ip_dst))
+    return(packet_list)
+
 
 
 def find_partners(packet_list):
@@ -76,22 +98,23 @@ def find_partners(packet_list):
 
         collect_out_set = False
 
-        
+        if len(disjoint_sets) == nbr_of_partners and all(len(item) == 1 for item in disjoint_sets):
+            return disjoint_sets
+
     # print(disjoint_sets)
     return disjoint_sets
 
 
-packet_list = read_pcap()
+packet_list = zipped_read_pcap()
 partners = find_partners(packet_list)
-print(partners)
 str_partners = [partner.pop() for partner in partners]
 
-sum = 0
+ip_sum = 0
 for partner in str_partners:
-    partner = str(partner).split(".")
-    hex = "{:02X}{:02X}{:02X}{:02X}".format(*map(int, partner))
+    string_partner = str(partner).split(".")
+    # Code from https://stackoverflow.com/questions/20948393/convert-a-ip-to-hex-by-python
+    hex = "{:02X}{:02X}{:02X}{:02X}".format(*map(int, string_partner))
     result = int(hex, 16)
-    sum += result
-print(sum)
-#Svaret ska vara: 6100595791
-
+    ip_sum += result
+print(ip_sum)
+# Svaret ska vara: 6100595791
