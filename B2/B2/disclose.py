@@ -7,7 +7,7 @@ nbr_of_partners = int(input("Input the number of partners: "))
 
 
 def read_pcap():
-    testcap = open(r'cia.log.13372.pcap', 'rb')
+    testcap = open(r'cia.log.1337.pcap', 'rb')
     capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
     # print the packets
@@ -83,14 +83,15 @@ def find_partners(packet_list):
 
 packet_list = read_pcap()
 partners = find_partners(packet_list)
+print(partners)
 str_partners = [partner.pop() for partner in partners]
 
 sum = 0
 for partner in str_partners:
     partner = str(partner).split(".")
-    print(partner)
     hex = "{:02X}{:02X}{:02X}{:02X}".format(*map(int, partner))
     result = int(hex, 16)
     sum += result
 print(sum)
+#Svaret ska vara: 6100595791
 
