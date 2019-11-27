@@ -62,7 +62,7 @@ def find_partners(packet_list):
             if packet_list[i]['ip_src'] == subject_ip:
                 collect_out_set = True
             i += 1
-        if(collect_out_set == True):
+        if collect_out_set:
             outgoing_sets.append([])
         while packet_list[i]['ip_src'] == mix_ip and i < size:
             if collect_out_set:
@@ -82,7 +82,7 @@ def find_partners(packet_list):
                     disjoint = False
                 j += 1
             if disjoint:
-                # print(outgoing_sets[-1])
+                #print(outgoing_sets[-1])
                 disjoint_sets.append(outgoing_sets[-1])
             # print('------------')
         # When m disjoint sets are found, start reducing
@@ -92,20 +92,20 @@ def find_partners(packet_list):
                 # print(outgoing_sets[-1])
                 new_set = item & outgoing_sets[-1]
                 # print(new_set)
-                if len(new_set):
+                if len(new_set) == 1:
                     item.clear()
                     item.update(new_set)
 
         collect_out_set = False
 
-        if len(disjoint_sets) == nbr_of_partners and all(len(item) == 1 for item in disjoint_sets):
-            return disjoint_sets
+    if len(disjoint_sets) == nbr_of_partners and all(len(item) == 1 for item in disjoint_sets):
+        return disjoint_sets
 
     # print(disjoint_sets)
-    return disjoint_sets
+    #return disjoint_sets
 
 
-packet_list = zipped_read_pcap()
+packet_list = read_pcap()
 partners = find_partners(packet_list)
 str_partners = [partner.pop() for partner in partners]
 
