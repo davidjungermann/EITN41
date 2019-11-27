@@ -22,3 +22,15 @@ byte_hex = hashlib.sha1(array2).hexdigest()
 print(int(str(byte_hex), 16))
 
 
+partners = ["85.14.156.21", "47.56.124.15", "210.25.145.218"]
+
+sum = 0
+for partner in partners:
+    #partner = partner.pop()
+    partner = partner.split(".")
+    hex = "{:02X}{:02X}{:02X}{:02X}".format(*map(int, partner))
+    result = int(hex, 16)
+    sum += result
+print(sum)
+
+
