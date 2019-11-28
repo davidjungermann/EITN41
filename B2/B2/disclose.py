@@ -5,7 +5,7 @@ def main():
     subject_ip = input("Input the subjects IP: ")
     mix_ip = input('Input the IP of the mix: ' )
     nbr_of_partners = int(input("Input the number of partners: "))
-    packet_list = zipped_read_pcap()
+    packet_list = read_pcap()
     partners = find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners)
 
     str_partners = [partner.pop() for partner in partners]
@@ -52,17 +52,8 @@ def zipped_read_pcap():
     print('timestamp\teth src\t\t\teth dst\t\t\tIP src\t\tIP dst')
     packet_list = []
     for pkt in capfile.packets:
-        #timestamp = pkt.timestamp
-        # all data is ASCII encoded (byte arrays). If we want to compare with strings
-        # we need to decode the byte arrays into UTF8 coded strings
         packet_list.append({'ip_src': pkt.packet.payload.src.decode('UTF8'),
                             'ip_dst': pkt.packet.payload.dst.decode('UTF8')})
-        #eth_src = pkt.packet.src.decode('UTF8')
-        #eth_dst = pkt.packet.dst.decode('UTF8')
-        #ip_src = pkt.packet.payload.src.decode('UTF8')
-        #ip_dst = pkt.packet.payload.dst.decode('UTF8')
-        #print('{}\t\t{}\t{}\t{}\t{}'.format(
-        #    timestamp, eth_src, eth_dst, ip_src, ip_dst))
     return(packet_list)
 
 def find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners):
@@ -100,10 +91,8 @@ def find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners):
         elif len(disjoint_sets) == nbr_of_partners:
             new_sets = []
             count = 0
-            for item in disjoint_sets:
-                new_sets.append(item.intersection(outgoing_set))
-            for item in new_sets:
-                if(len(item) != 0):
+            for item in disjoint_sets:  
+                if(len(item.intersection(outgoing_set)) != 0):
                     count += 1
             if(count == 1):
                 for item in disjoint_sets:
