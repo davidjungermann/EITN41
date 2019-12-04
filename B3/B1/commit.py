@@ -1,18 +1,17 @@
 import hashlib
-from random import randint
+import matplotlib.pyplot as plt
 
 
 def create_commit(v, k, X):
     m = str(bin(v)[2:] + bin(k)[2:])
     hash_object = hashlib.sha1(m.encode())
     hash_value = hash_object.hexdigest()
-    return hash_value
+    return bin(int(hash_value, 16))
 
 
 def create_k():
     values_of_k = []
-
-    for i in range(1, 20):
+    for i in range(2 ** 15, 2 ** 16):
         values_of_k.append(i)
     return values_of_k
 
@@ -51,8 +50,12 @@ def find_intersections(X):
         for right in right_column:
             possible_intersections_right.append(right[2: trunc_value + 2])
 
-        print("Nbr of intersections for X-value = " + str(trunc_value) + " : " + str(intersection(possible_intersections_left,
+        print("Nbr of collisions for X-value = " + str(trunc_value) + " : " + str(intersection(possible_intersections_left,
                                                                                                   possible_intersections_right)))
+
+def binding_stats():
+    
+
 
 
 find_intersections(35)
