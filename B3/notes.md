@@ -49,6 +49,8 @@ It should be difficult to find two different messages m1 and m2 such that hash(m
 
 1. Second pre-image resistance. We should find a hash that is the same for v= 0 and v= 1 for different value k. 
 
+Tänk på att om collision, 100% sannolikhet för non-idiot. 
+
 2. Collision resistance. Birthday attack? 
 
 
