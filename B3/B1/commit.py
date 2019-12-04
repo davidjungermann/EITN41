@@ -1,5 +1,11 @@
 import hashlib
-import matplotlib.pyplot as plt
+import matplotlib.pyplot
+
+x_values = []
+y_values = []
+
+# Generates a commit according to the commitment scheme.
+# Returns a bit version of a hashed string.
 
 
 def create_commit(v, k, X):
@@ -8,6 +14,9 @@ def create_commit(v, k, X):
     hash_value = hash_object.hexdigest()
     return bin(int(hash_value, 16))
 
+# Generates a list of all possible k values to break binding.
+# Task suggests a random string, but also suggests a "non-idiot" attacker?
+
 
 def create_k():
     values_of_k = []
@@ -15,7 +24,7 @@ def create_k():
         values_of_k.append(i)
     return values_of_k
 
-
+# Constructs a dictionary with all possible commit-values for v = 0 and v = 1.
 def construct_columns(values, X):
     left_column = []
     right_column = []
@@ -34,7 +43,7 @@ def intersection(left, right):
     return len(res)
 
 
-def find_intersections(X):
+def find_collisions(X):
 
     columns = construct_columns(create_k(), X)
     left_column = columns.get("left")
@@ -49,13 +58,24 @@ def find_intersections(X):
 
         for right in right_column:
             possible_intersections_right.append(right[2: trunc_value + 2])
+        
+        nbr_of_collisions = intersection(possible_intersections_left, possible_intersections_right)
 
-        print("Nbr of collisions for X-value = " + str(trunc_value) + " : " + str(intersection(possible_intersections_left,
-                                                                                                  possible_intersections_right)))
+        add_to_plot(trunc_value, nbr_of_collisions / len(columns))
+        print("Nbr of collisions for X-value = " + str(trunc_value) + " : " + str(nbr_of_collisions))
 
-def binding_stats():
-    
+    binding_stats(x_values, y_values)
 
+def add_to_plot(x, y):
+    x_values.append(x)
+    y_values.append(y)
 
+def binding_stats(x, y):
+    stats = matplotlib.pyplot
+    stats.plot(x, y)
+    stats.xlabel("Hash output length")
+    stats.ylabel("Collisions")
+    stats.title("Number of collisions on varying SHA-1 output lengths")
+    stats.show()
 
-find_intersections(35)
+find_collisions(50)
