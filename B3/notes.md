@@ -47,6 +47,8 @@ Collision resistance:
 It should be difficult to find two different messages m1 and m2 such that hash(m1) = hash(m2). Such a pair is called a cryptographic hash collision. This property is sometimes referred to as strong collision resistance. It requires a hash value at least twice as long as that required for pre-image resistance; otherwise collisions may be found by a birthday attack.[4]
 
 
-1.
+1. Second pre-image resistance. We should find a hash that is the same for v= 0 and v= 1 for different value k. 
+
+2. Collision resistance. Birthday attack? 
 
 
