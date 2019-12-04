@@ -5,23 +5,22 @@ import string
 
 def construct_commit(v, k, X):
     md5 = hashlib.md5()
-    k = str(k)
-    # Makes k string into bits, code from https://stackoverflow.com/questions/18815820/convert-string-to-binary-in-python
-    binSt = ''.join(format(ord(x), 'b') for x in k)
-    m = (bin(v) + binSt)[2:].encode()
+    m = (bin(v)[2:] + k).encode()
     md5.update(m)
-    print(md5.hexdigest()[2:X])
-    return md5.hexdigest()[2:X]
+    print(md5.hexdigest()[2: X + 2])
+    return md5.hexdigest()[2: X + 2] # Since we lose two bits after removing "0b" from bit strings. 
 
 
 def create_k():
-    k_length = 2  # 1 ascii char = 8 bit?
-    # Generates a random string, code from https://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=2))
+    k_length = 16
+    return bin(random.getrandbits(k_length))[2:]
 
 
 def construct_bindings(X):
-    print("hej")
+    bindings = [0] * X # Allocates empty array. 
+    correct_hits = 0
+    for i in range(bindings):
 
 
-construct_commit(1, create_k(), 40)
+
+construct_commit(1, create_k(), 12)
