@@ -19,7 +19,6 @@ def main():
         result = int(hex, 16)
         ip_sum += result
     print(ip_sum)
-    # Svaret ska vara: 6100595791
 
 
 def read_pcap():
@@ -106,9 +105,7 @@ def find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners):
         sub_sent_msg = False
     # If sets are equal to one, return
     if len(disjoint_sets) == nbr_of_partners and all(len(item) == 1 for item in disjoint_sets):
-        print(disjoint_sets)
         return disjoint_sets
-    print(disjoint_sets)
     return disjoint_sets
 
 
