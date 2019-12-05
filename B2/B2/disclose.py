@@ -1,9 +1,10 @@
 from pcapfile import savefile
 import gzip
 
+
 def main():
     subject_ip = input("Input the subjects IP: ")
-    mix_ip = input('Input the IP of the mix: ' )
+    mix_ip = input('Input the IP of the mix: ')
     nbr_of_partners = int(input("Input the number of partners: "))
     packet_list = zipped_read_pcap()
     partners = find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners)
@@ -18,13 +19,11 @@ def main():
         result = int(hex, 16)
         ip_sum += result
     print(ip_sum)
-    # Svaret ska vara: 6100595791
-
-
 
 
 def read_pcap():
-    testcap = open(r'C:\\Users\\Johannes Persson\Documents\Skola\Websäkerhet EDAP05\\Kod\\EITN41\B2\B2\\cia.log.1337.pcap', 'rb')
+    testcap = open(
+        r'cia.log.1337.pcap', 'rb')
     capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
     # print the packets
@@ -44,8 +43,14 @@ def read_pcap():
             timestamp, eth_src, eth_dst, ip_src, ip_dst))
     return(packet_list)
 
+
 def zipped_read_pcap():
+<<<<<<< HEAD
     testcap = gzip.open(r'C:\\Users\\Johannes Persson\Downloads\\cia.log.3.pcap.gz', 'rb')
+=======
+    testcap = gzip.open(
+        r'cia.log.5.pcap.gz', 'rb')
+>>>>>>> 76abfa709fc84bf4d83f9cb70d7981c48848156f
     capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
     # print the packets
@@ -56,12 +61,13 @@ def zipped_read_pcap():
                             'ip_dst': pkt.packet.payload.dst.decode('UTF8')})
     return(packet_list)
 
+
 def find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners):
     sub_sent_msg = False
     i = 0
     size = len(packet_list) - 1
     disjoint_sets = []
-    
+
     while i < size:
         # Finding if subject sent a message when subject sent message
         while packet_list[i]['ip_src'] != mix_ip:
@@ -81,7 +87,7 @@ def find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners):
             disjoint = True
             j = 0
             while j < len(disjoint_sets) and disjoint:
-                
+
                 if len(disjoint_sets[j].intersection(outgoing_set)) != 0 or disjoint_sets[j] == outgoing_set:
                     disjoint = False
                 j += 1
@@ -91,7 +97,7 @@ def find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners):
         elif len(disjoint_sets) == nbr_of_partners:
             new_sets = []
             count = 0
-            for item in disjoint_sets:  
+            for item in disjoint_sets:
                 if(len(item.intersection(outgoing_set)) != 0):
                     count += 1
             if(count == 1):
@@ -101,13 +107,10 @@ def find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners):
                         item.clear()
                         item.update(new_set)
         sub_sent_msg = False
-    #If sets are equal to one, return
+    # If sets are equal to one, return
     if len(disjoint_sets) == nbr_of_partners and all(len(item) == 1 for item in disjoint_sets):
-        print(disjoint_sets)
         return disjoint_sets
-    print(disjoint_sets)
     return disjoint_sets
-
 
 
 main()
