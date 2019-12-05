@@ -57,16 +57,18 @@ def find_binding_collisions(X):
     for trunc_value in range(X):
         possible_intersections_left = []
         possible_intersections_right = []
+        left_set = set()
+        right_set = set()
         total_commits = 0
 
         for left in left_column:
             possible_intersections_left.append(left[2: trunc_value + 2])
-
+            left_set.add(left[2: trunc_value + 2])
         for right in right_column:
             possible_intersections_right.append(right[2: trunc_value + 2])
-
+            right_set.add(right[2: trunc_value + 2])
         res = intersection(
-            possible_intersections_left, possible_intersections_right)
+            left_set, right_set)
         nbr_of_collisions = len(res)
 
         add_to_plot(trunc_value, nbr_of_collisions / len(columns))
