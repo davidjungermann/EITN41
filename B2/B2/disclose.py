@@ -5,7 +5,7 @@ def main():
     subject_ip = input("Input the subjects IP: ")
     mix_ip = input('Input the IP of the mix: ' )
     nbr_of_partners = int(input("Input the number of partners: "))
-    packet_list = read_pcap()
+    packet_list = zipped_read_pcap()
     partners = find_partners(packet_list, mix_ip, subject_ip, nbr_of_partners)
 
     str_partners = [partner.pop() for partner in partners]
@@ -45,7 +45,7 @@ def read_pcap():
     return(packet_list)
 
 def zipped_read_pcap():
-    testcap = gzip.open(r'C:\\Users\\Johannes Persson\Documents\Skola\Websäkerhet EDAP05\\Kod\\EITN41\B2\B2\\cia.log.1339.pcap.gz', 'rb')
+    testcap = gzip.open(r'C:\\Users\\Johannes Persson\Downloads\\cia.log.3.pcap.gz', 'rb')
     capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
     # print the packets
