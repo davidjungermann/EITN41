@@ -43,8 +43,6 @@ def construct_columns(values, X):
 
 # Code from https://www.geeksforgeeks.org/python-intersection-two-lists/
 def intersection(left, right):
-    commit_hit = 0
-    non_commit_hit = 0
     res = [value for value in left if value in right]
     return res
 
