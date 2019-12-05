@@ -77,7 +77,6 @@ def find_binding_collisions(X):
 
     binding_stats(x_values, y_values)
 
-
 def add_to_plot(x, y):
     x_values.append(x)
     y_values.append(y)
