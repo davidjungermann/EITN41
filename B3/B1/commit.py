@@ -1,5 +1,6 @@
 import hashlib
 import matplotlib.pyplot
+from random import randint
 
 x_values = []
 y_values = []
@@ -8,7 +9,7 @@ y_values = []
 # Returns a bit version of a hashed string.
 
 
-def create_commit(v, k, X):
+def create_commit(v, k):
     m = str(bin(v)[2:] + bin(k)[2:])
     hash_object = hashlib.sha1(m.encode())
     hash_value = hash_object.hexdigest()
@@ -20,18 +21,20 @@ def create_commit(v, k, X):
 
 def create_k():
     values_of_k = []
-    for i in range(2 ** 15, 2 ** 16):
+    for i in range(0, 2 ** 16 - 1):
         values_of_k.append(i)
     return values_of_k
 
 # Constructs a dictionary with all possible commit-values for v = 0 and v = 1.
+
+
 def construct_columns(values, X):
     left_column = []
     right_column = []
 
     for k in values:
-        left_column.append(create_commit(0, k, X))
-        right_column.append(create_commit(1, k, X))
+        left_column.append(create_commit(0, k))
+        right_column.append(create_commit(1, k))
 
     dict = {"left": left_column, "right": right_column}
     return dict
@@ -39,36 +42,72 @@ def construct_columns(values, X):
 
 # Code from https://www.geeksforgeeks.org/python-intersection-two-lists/
 def intersection(left, right):
+    commit_hit = 0
+    non_commit_hit = 0
     res = [value for value in left if value in right]
-    return len(res)
+    return res
 
 
-def find_collisions(X):
+def count_left_hits(res, left):
+    commit_hit = 0
+
+    for value in res:
+        if value in left:
+            commit_hit += 1
+    return commit_hit
+
+
+def count_right_hits(res, right):
+    commit_hit = 0
+
+    for value in res:
+        if value in right:
+            commit_hit += 1
+    return commit_hit
+
+
+def find_binding_collisions(X):
 
     columns = construct_columns(create_k(), X)
     left_column = columns.get("left")
     right_column = columns.get("right")
 
-    for trunc_value in range(1, X):
+    for trunc_value in range(X):
         possible_intersections_left = []
         possible_intersections_right = []
+        total_commits = 0
 
         for left in left_column:
             possible_intersections_left.append(left[2: trunc_value + 2])
 
         for right in right_column:
             possible_intersections_right.append(right[2: trunc_value + 2])
-        
-        nbr_of_collisions = intersection(possible_intersections_left, possible_intersections_right)
+
+        res = intersection(
+            possible_intersections_left, possible_intersections_right)
+        nbr_of_collisions = len(res)
+
+        commit_hits = count_right_hits(res, possible_intersections_right)
+        non_commit_hits = count_left_hits(res, possible_intersections_right)
+
+        if commit_hits > non_commit_hits:
+            total_commits += 1
+        else:
+            total_commits += randint(0, 1)
+
+        #print("Conceals broken: " + str(total_commits))
 
         add_to_plot(trunc_value, nbr_of_collisions / len(columns))
-        print("Nbr of collisions for X-value = " + str(trunc_value) + " : " + str(nbr_of_collisions))
+        print("Nbr of collisions for X-value = " +
+              str(trunc_value) + " : " + str(nbr_of_collisions))
 
     binding_stats(x_values, y_values)
+
 
 def add_to_plot(x, y):
     x_values.append(x)
     y_values.append(y)
+
 
 def binding_stats(x, y):
     stats = matplotlib.pyplot
@@ -78,4 +117,5 @@ def binding_stats(x, y):
     stats.title("Number of collisions on varying SHA-1 output lengths")
     stats.show()
 
-find_collisions(50)
+
+find_binding_collisions(35)
