@@ -17,9 +17,6 @@ def create_commit(v, k):
     return bin(int(hash_value, 16))
 
 # Generates a list of all possible k values to break binding.
-# Task suggests a random string, but also suggests a "non-idiot" attacker?
-
-
 def create_k():
     values_of_k = []
     for i in range(0, 2 ** 16 - 1):
@@ -78,7 +75,6 @@ def find_collisions(X):
 
         possibilities = set(left_set)
         possibilities = possibilities.union(right_set)
-        nbr_unique = 0
         nbr_unique = left_set.symmetric_difference(right_set)
         ratio = len(nbr_unique) / len(possibilities)
 
@@ -90,13 +86,12 @@ def find_collisions(X):
 
 def stats(x, y, y2):
     stats = matplotlib.pyplot
-    stats.plot(x, y, label = "Binding property")
-    stats.plot(x, y2, label = "Concealing property")
+    stats.plot(x, y, label="Binding property")
+    stats.plot(x, y2, label="Concealing property")
     stats.xlabel("Hash output length")
-    stats.ylabel("Percentage of breaking property in scheme")
-    stats.title("Number of collisions on varying SHA-1 output lengths")
+    stats.ylabel("Percent")
     stats.legend(loc='best')
     stats.show()
 
 
-find_collisions(35)
+find_collisions(40)
