@@ -68,7 +68,7 @@ def find_binding_collisions(X):
             possible_intersections_right.append(right[2: trunc_value + 2])
             right_set.add(right[2: trunc_value + 2])
         res = intersection(
-            left_set, right_set)
+            possible_intersections_left, right_set)
         nbr_of_collisions = len(res)
 
         add_to_plot(trunc_value, nbr_of_collisions / len(columns))
