@@ -75,10 +75,11 @@ def find_binding_collisions(X):
         #Procedure The other one
         #BEGIN
         psoepileties = set(left_set)
-        psoepileties.union(right_set)
-        
+        psoepileties = psoepileties.union(right_set)
+        uniquie = 0
         uniquie = left_set.symmetric_difference(right_set)
         ratio = len(uniquie) / len(psoepileties)
+        print(str(len(uniquie)) + "/ " + str(len(psoepileties)))
 
         #END
         add_to_plot(trunc_value, nbr_of_collisions / len(columns))
