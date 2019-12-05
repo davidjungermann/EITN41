@@ -71,9 +71,21 @@ def find_binding_collisions(X):
             possible_intersections_left, right_set)
         nbr_of_collisions = len(res)
 
+
+        #Procedure The other one
+        #BEGIN
+        psoepileties = set(left_set)
+        psoepileties.union(right_set)
+        
+        uniquie = left_set.symmetric_difference(right_set)
+        ratio = len(uniquie) / len(psoepileties)
+
+        #END
         add_to_plot(trunc_value, nbr_of_collisions / len(columns))
         print("Nbr of collisions for X-value = " +
-              str(trunc_value) + " : " + str(nbr_of_collisions))
+              str(trunc_value) + " : " + str(nbr_of_collisions) + " The second one: " + str(ratio))
+
+        #The other one
 
     binding_stats(x_values, y_values)
 
