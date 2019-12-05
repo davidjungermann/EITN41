@@ -4,6 +4,7 @@ from random import randint
 
 x_values = []
 y_values = []
+y_conceal_values = []
 
 # Generates a commit according to the commitment scheme.
 # Returns a bit version of a hashed string.
@@ -42,19 +43,18 @@ def construct_columns(values, X):
 
 # Code from https://www.geeksforgeeks.org/python-intersection-two-lists/
 def intersection(left, right):
-    commit_hit = 0
-    non_commit_hit = 0
     res = [value for value in left if value in right]
     return res
 
 
-def find_binding_collisions(X):
-
+def find_collisions(X):
     columns = construct_columns(create_k(), X)
     left_column = columns.get("left")
     right_column = columns.get("right")
+    bindings = []
+    conceals = []
 
-    for trunc_value in range(X):
+    for trunc_value in range(1, X):
         possible_intersections_left = []
         possible_intersections_right = []
         left_set = set()
@@ -71,37 +71,32 @@ def find_binding_collisions(X):
             possible_intersections_left, right_set)
         nbr_of_collisions = len(res)
 
-
-        #Procedure The other one
-        #BEGIN
-        psoepileties = set(left_set)
-        psoepileties = psoepileties.union(right_set)
-        uniquie = 0
-        uniquie = left_set.symmetric_difference(right_set)
-        ratio = len(uniquie) / len(psoepileties)
-        print(str(len(uniquie)) + "/ " + str(len(psoepileties)))
-
-        #END
-        add_to_plot(trunc_value, nbr_of_collisions / len(columns))
         print("Nbr of collisions for X-value = " +
-              str(trunc_value) + " : " + str(nbr_of_collisions) + " The second one: " + str(ratio))
+              str(trunc_value) + " : " + str(nbr_of_collisions))
+        x_values.append(trunc_value)
+        y_values.append(100 * (nbr_of_collisions) / 2**16)
 
-        #The other one
+        possibilities = set(left_set)
+        possibilities = possibilities.union(right_set)
+        nbr_unique = 0
+        nbr_unique = left_set.symmetric_difference(right_set)
+        ratio = len(nbr_unique) / len(possibilities)
 
-    binding_stats(x_values, y_values)
+        print("Probablility of breaking concealing property: " + str(ratio))
+        y_conceal_values.append(100 * ratio)
 
-def add_to_plot(x, y):
-    x_values.append(x)
-    y_values.append(y)
+    stats(x_values, y_values, y_conceal_values)
 
 
-def binding_stats(x, y):
+def stats(x, y, y2):
     stats = matplotlib.pyplot
-    stats.plot(x, y)
+    stats.plot(x, y, label = "Binding property")
+    stats.plot(x, y2, label = "Concealing property")
     stats.xlabel("Hash output length")
-    stats.ylabel("Collisions")
+    stats.ylabel("Percentage of breaking property in scheme")
     stats.title("Number of collisions on varying SHA-1 output lengths")
+    stats.legend(loc='best')
     stats.show()
 
 
-find_binding_collisions(35)
+find_collisions(35)
