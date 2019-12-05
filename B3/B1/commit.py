@@ -48,24 +48,6 @@ def intersection(left, right):
     return res
 
 
-def count_left_hits(res, left):
-    commit_hit = 0
-
-    for value in res:
-        if value in left:
-            commit_hit += 1
-    return commit_hit
-
-
-def count_right_hits(res, right):
-    commit_hit = 0
-
-    for value in res:
-        if value in right:
-            commit_hit += 1
-    return commit_hit
-
-
 def find_binding_collisions(X):
 
     columns = construct_columns(create_k(), X)
@@ -86,16 +68,6 @@ def find_binding_collisions(X):
         res = intersection(
             possible_intersections_left, possible_intersections_right)
         nbr_of_collisions = len(res)
-
-        commit_hits = count_right_hits(res, possible_intersections_right)
-        non_commit_hits = count_left_hits(res, possible_intersections_right)
-
-        if commit_hits > non_commit_hits:
-            total_commits += 1
-        else:
-            total_commits += randint(0, 1)
-
-        #print("Conceals broken: " + str(total_commits))
 
         add_to_plot(trunc_value, nbr_of_collisions / len(columns))
         print("Nbr of collisions for X-value = " +
