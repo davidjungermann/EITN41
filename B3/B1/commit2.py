@@ -2,7 +2,7 @@ from random import randint
 import matplotlib.pyplot as plot
 import hashlib
 
-X_value = 35
+X_value = 40
 
 
 def generate_k_values():
@@ -59,7 +59,7 @@ def calc_concealing(X):
 
     if v == 1:
         return len(commits1) / (len(commits0) + len(commits1))
-        
+
     return len(commits0) / (len(commits0) + len(commits1))
 
 
@@ -67,7 +67,7 @@ def calc_probabilities():
     calculated_binding_prob = []
     calculated_concealing_prob = []
     x_values = []
-    iterations = 5
+    iterations = 100   
 
     for output_length in range(X_value):
         binding_values = []
@@ -91,8 +91,7 @@ def stats():
     plot.xlabel("Hash output length")
 
     plot.plot(x_values, calculated_binding_prob, label="Binding property")
-    plot.plot(x_values, calculated_concealing_prob,
-              label="Concealing property")
+    plot.plot(x_values, calculated_concealing_prob, label="Concealing property")
     plot.legend(loc='best')
     plot.show()
 
