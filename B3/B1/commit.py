@@ -17,6 +17,8 @@ def create_commit(v, k):
     return bin(int(hash_value, 16))
 
 # Generates a list of all possible k values to break binding.
+
+
 def create_k():
     values_of_k = []
     for i in range(0, 2 ** 16 - 1):
@@ -59,11 +61,13 @@ def find_collisions(X):
         total_commits = 0
 
         for left in left_column:
-            possible_intersections_left.append(left[2: trunc_value + 2])
-            left_set.add(left[2: trunc_value + 2])
+            val = left[2: trunc_value + 2]
+            possible_intersections_left.append(val)
+            left_set.add(val)
         for right in right_column:
-            possible_intersections_right.append(right[2: trunc_value + 2])
-            right_set.add(right[2: trunc_value + 2])
+            val = right[2: trunc_value + 2]
+            possible_intersections_right.append(val)
+            right_set.add(val)
         res = intersection(
             possible_intersections_left, right_set)
         nbr_of_collisions = len(res)
@@ -71,17 +75,34 @@ def find_collisions(X):
         print("Nbr of collisions for X-value = " +
               str(trunc_value) + " : " + str(nbr_of_collisions))
         x_values.append(trunc_value)
-        y_values.append(100 * (nbr_of_collisions) / 2**16)
+        y_values.append(100 * (nbr_of_collisions) / 2 ** 16)
 
-        possibilities = set(left_set)
-        possibilities = possibilities.union(right_set)
-        nbr_unique = left_set.symmetric_difference(right_set)
-        ratio = len(nbr_unique) / len(possibilities)
+        #possibilities = left_set.union(right_set)
+        #possibilites = left_set.symmetric_difference(right_set)
+        #unique = [value for value in possible_intersections_left if value in possible_intersections_right]
+        #ratio = len(unique) / len(left_column + right_column)
 
-        print("Probablility of breaking concealing property: " + str(ratio))
-        y_conceal_values.append(100 * ratio)
+
+
+        print("Probablility of breaking concealing property: " + str(find_conceals()))
+        y_conceal_values.append(100 * find_conceals())
 
     stats(x_values, y_values, y_conceal_values)
+
+def find_conceals():
+    v = randint(0, 1)
+    k_values = create_k()
+    commits = {0: [], 1: []}
+    for k in k_values:
+        commit = create_commit(randint(0, 1), k)
+
+        for i in range(2**16):
+            commit0 = create_commit(0, i)
+            commit1 = create_commit(1, i)
+
+            if commit == commit0: commits[0].append(commit0)
+            if commit == commit1: commits[1].append(commit1)
+        return len(commits[v]) / (len(commits[0]) + len(commits[1]))
 
 
 def stats(x, y, y2):
