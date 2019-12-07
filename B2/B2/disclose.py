@@ -45,12 +45,8 @@ def read_pcap():
 
 
 def zipped_read_pcap():
-<<<<<<< HEAD
-    testcap = gzip.open(r'C:\\Users\\Johannes Persson\Downloads\\cia.log.3.pcap.gz', 'rb')
-=======
     testcap = gzip.open(
         r'cia.log.5.pcap.gz', 'rb')
->>>>>>> 76abfa709fc84bf4d83f9cb70d7981c48848156f
     capfile = savefile.load_savefile(testcap, layers=2, verbose=True)
 
     # print the packets

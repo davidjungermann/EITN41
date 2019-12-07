@@ -77,10 +77,10 @@ def find_collisions(X):
         x_values.append(trunc_value)
         y_values.append(100 * (nbr_of_collisions) / 2 ** 16)
 
-        #possibilities = left_set.union(right_set)
-        #possibilites = left_set.symmetric_difference(right_set)
-        #unique = [value for value in possible_intersections_left if value in possible_intersections_right]
-        #ratio = len(unique) / len(left_column + right_column)
+        possibilities = left_set.union(right_set)
+        possibilites = left_set.symmetric_difference(right_set)
+
+        ratio = len(possibilites) / len(possibilites)
 
 
 
