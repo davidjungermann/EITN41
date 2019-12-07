@@ -67,9 +67,9 @@ def calc_probabilities():
     calculated_binding_prob = []
     calculated_concealing_prob = []
     x_values = []
-    iterations = 100   
+    iterations = 100
 
-    for output_length in range(X_value):
+    for output_length in range(1, X_value):
         binding_values = []
         concealing_values = []
         for k in range(iterations):
