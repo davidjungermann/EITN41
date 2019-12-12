@@ -61,7 +61,5 @@ def main():
     URL = "https://eitn41.eit.lth.se:3119/ha4/addgrade.php"
     
     generate_signature(name, grade, URL)
-    
-    generate_signature("Kalle", "5", URL)
 
 main()
