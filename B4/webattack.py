@@ -18,7 +18,6 @@ def http_request_time(URL, params):
     # Disables SSL verification since we don't have a valid certificate.
     r = requests.get(URL, params, verify=False)
     time = r.elapsed.total_seconds()
-    print(time)
     return time
 
 
@@ -52,8 +51,8 @@ def generate_signature(name, grade, URL):
                 subject_char = char
 
         signature += subject_char
-        print(signature)
-    print(signature)
+        print("Working...")
+    print("The signature is: " + signature)
 
 def main():
     name = input(str("Input the name: "))
