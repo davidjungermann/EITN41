@@ -34,7 +34,7 @@ def generate_signature(name, grade, URL):
     signature = ""
     possible_chars = generate_chars()
     params = {'name': name, 'grade': grade, 'signature': signature}
-    iterations = 12
+    iterations = 20
     for i in range(20):  # Signature is 20 chars long.
         max_time = 0.0
         subject_char = ''
