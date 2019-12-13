@@ -25,17 +25,10 @@ def MGF1(mgfSeed, maskLen):
     for i in range(maskLen / hLen - 1):
         print("hej")
 
-def I2OSP(x, xLen):        
-    base256 = ""
+def I2OSP(x, xLen):      
     if x >= 256 ** xLen:
         print("Integer too large")
         return None
+    return (hex(x)[2:].zfill(2*  xLen))
 
-    for i in range(xLen, -1 ,-1):
-        byte = int(x / 256 ** i)
-        x -= byte * 256 **i
-        base256 += str(byte) + " :: "
-    
-    print(base256)
-
-I2OSP(23000, 20)
+I2OSP(512, 20)

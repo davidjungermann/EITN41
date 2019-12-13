@@ -14,6 +14,7 @@ import urllib3
 # Turns off annoying warnings about certificates.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+
 def http_request_time(URL, params):
     # Disables SSL verification since we don't have a valid certificate.
     r = requests.get(URL, params, verify=False)
@@ -42,7 +43,7 @@ def generate_signature(name, grade, URL):
             params['signature'] = temp
 
             request_times = []
-            for i in range(iterations): 
+            for i in range(iterations):
                 request_times.append(http_request_time(URL, params))
             current_time = min(request_times)
 
@@ -54,11 +55,13 @@ def generate_signature(name, grade, URL):
         print("Working...")
     print("The signature is: " + signature)
 
+
 def main():
     name = input(str("Input the name: "))
     grade = input("Input the grade: ")
     URL = "https://eitn41.eit.lth.se:3119/ha4/addgrade.php"
-    
+
     generate_signature(name, grade, URL)
+
 
 main()
