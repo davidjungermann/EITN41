@@ -13,7 +13,8 @@
 # OAEP_decode, one parameter, the message EM to be decoded.
 # OAEP-decode(EM) = E
 # Hexadecimal input and output. Enoded message 128 bytes. 1024-bit RSA.
-
+from math import ceil
+from hashlib import sha1
 
 def MGF1(mgfSeed, maskLen):
     hLen = 20
@@ -22,13 +23,17 @@ def MGF1(mgfSeed, maskLen):
         print("Mask too long")
         return None
 
-    for i in range(maskLen / hLen - 1):
-        print("hej")
+    for i in range(ceil(maskLen/hLen)):
+        C = I2OSP(i, 4)
+        concat = (mgfSeed + C)
+        digest = sha1(bytearray.fromhex(concat)).hexdigest()
+        T = T + digest
+        return T[:2 * maskLen ]
 
 def I2OSP(x, xLen):      
-    if x >= 256 ** xLen:
+    if x >= 256 ** xLen:    
         print("Integer too large")
         return None
-    return (hex(x)[2:].zfill(2*  xLen))
+    return hex(x)[2:].zfill(2 * xLen)
 
-I2OSP(512, 20)
+MGF1("0123456789abcdef", 30)    
