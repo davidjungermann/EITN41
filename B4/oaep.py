@@ -33,9 +33,13 @@ def I2OSP(x, xLen):
 
     for i in range(xLen, -1 ,-1):
         byte = int(x / 256 ** i)
-        x -= byte * 256 **i
-        base256 += str(byte) + " :: "
+        x -= byte * 256 ** i
+        byte = hex(byte)
+        byte = byte[2:]
+        if len(byte) == 1:
+            byte = "0" + byte
+        base256 += byte 
     
     print(base256)
 
-I2OSP(23000, 20)
+I2OSP(3847197139, 20)
