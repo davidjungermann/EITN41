@@ -24,7 +24,6 @@ def MGF1(mgfSeed, maskLen):
         return None
 
     for i in range(ceil(maskLen/hLen)):
-        print("hej")
         C = I2OSP(i, 4)
         concat = (mgfSeed + C)
         digest = sha1(bytearray.fromhex(concat)).hexdigest()
@@ -45,6 +44,5 @@ def I2OSP(x, xLen):
         if len(byte) == 1:
             byte = "0" + byte
         base256 += byte 
-    print(base256)
     return base256
 MGF1("0123456789abcdef", 30) 
