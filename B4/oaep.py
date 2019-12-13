@@ -71,7 +71,6 @@ def OAEP_encode(m, seed, L=""):
     maskedSeed = hex(int(seed, 16) ^ int(seedMask, 16))[2:]
 
     EM = ("00" + maskedSeed + maskedDB).zfill(2 * k)
-    print(EM)
     return EM
 
 def OAEP_decode(EM, L= ""):
@@ -80,19 +79,28 @@ def OAEP_decode(EM, L= ""):
         return
 
     lHash = sha1(bytearray(L.encode())).hexdigest()
-    Y = EM[2:]
-    maskedDB = EM[2 * hLen + 2]
+    Y = EM[:2]
+
+    maskedDB = EM[2 * hLen + 2:]
     maskedSeed = EM[2: hLen * 2 + 2]
     
     seedMask = MGF1(maskedDB, hLen)
     seed = hex(int(maskedSeed, 16) ^ int(seedMask, 16))[2:]
-
     dbMask = MGF1(seed, k - hLen - 1)
     DB = hex(int(maskedDB, 16) ^ int(dbMask, 16))[2:]
     
-    
+    lHashPrim = DB[:hLen * 2]
+    PsOffset = DB[hLen * 2:].find("01")
+    if PsOffset == -1:
+        print("Decryption error")
+        return None
+    PS = DB[hLen * 2: PsOffset]
+    M = DB[hLen * 2 + len(PS) + 2:]
+    if lHash != lHashPrim or Y != "00":
+        print("Decryption error")
+        
+    return M.lstrip("0")
 
-
-
-OAEP_decode("Hej")
+print(OAEP_decode("0000255975c743f5f11ab5e450825d93b52a160aeef9d3778a18b7aa067f90b2178406fa1e1bf77f03f86629dd5607d11b9961707736c2d16e7c668b367890bc6ef1745396404ba7832b1cdfb0388ef601947fc0aff1fd2dcd279dabde9b10bfc51f40e13fb29ed5101dbcb044e6232e6371935c8347286db25c9ee20351ee82")
+)
 
