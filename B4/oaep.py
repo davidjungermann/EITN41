@@ -13,6 +13,7 @@
 # OAEP_decode, one parameter, the message EM to be decoded.
 # OAEP-decode(EM) = E
 # Hexadecimal input and output. Enoded message 128 bytes. 1024-bit RSA.
+
 from math import ceil
 from hashlib import sha1
 
@@ -71,9 +72,11 @@ def OAEP_encode(m, seed, L=""):
     maskedSeed = hex(int(seed, 16) ^ int(seedMask, 16))[2:]
 
     EM = ("00" + maskedSeed + maskedDB).zfill(2 * k)
+    # print(EM)
     return EM
 
-def OAEP_decode(EM, L= ""):
+
+def OAEP_decode(EM, L=""):
     if len(L) >= (2 ** 64 - 1):
         print("label too long")
         return
@@ -83,12 +86,12 @@ def OAEP_decode(EM, L= ""):
 
     maskedDB = EM[2 * hLen + 2:]
     maskedSeed = EM[2: hLen * 2 + 2]
-    
+
     seedMask = MGF1(maskedDB, hLen)
     seed = hex(int(maskedSeed, 16) ^ int(seedMask, 16))[2:]
     dbMask = MGF1(seed, k - hLen - 1)
     DB = hex(int(maskedDB, 16) ^ int(dbMask, 16))[2:]
-    
+
     lHashPrim = DB[:hLen * 2]
     PsOffset = DB[hLen * 2:].find("01")
     if PsOffset == -1:
@@ -98,9 +101,11 @@ def OAEP_decode(EM, L= ""):
     M = DB[hLen * 2 + len(PS) + 2:]
     if lHash != lHashPrim or Y != "00":
         print("Decryption error")
-        
+    print(M.lstrip("0")[1:])
     return M.lstrip("0")[1:]
 
-print(OAEP_decode("0000255975c743f5f11ab5e450825d93b52a160aeef9d3778a18b7aa067f90b2178406fa1e1bf77f03f86629dd5607d11b9961707736c2d16e7c668b367890bc6ef1745396404ba7832b1cdfb0388ef601947fc0aff1fd2dcd279dabde9b10bfc51f40e13fb29ed5101dbcb044e6232e6371935c8347286db25c9ee20351ee82")
-)
 
+MGF1("6b1515f4b9f0703070b83106f54f0ec4f2466bf41cd9b2", 23)
+OAEP_encode("b5df90b703196a5f9d1e9bc875e5d898d0477cf0e30a1a0713d1fc76",
+            "855a58dfe4df82a1ee8a8747dceed117b28378e2")
+OAEP_decode("00cbbfadbb0b9e0d96f094a3d6e552b4d82db3e4f4f9d3778a18b7aa067f90b2178406fa1e1bf77f03f86629dd5607d11b9961707736c2d16e7c668b367890bc6ef1745396404ba7832b1cdfb0388ef601947fc0aff1fd2dcd279dabdfcd92a7a13808d96ceea0a999a9947874a4741e7530bd99046c3368c6485702ea93ad95")
