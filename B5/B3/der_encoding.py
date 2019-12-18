@@ -14,12 +14,15 @@ def der_conv(integer , der_type):
         length += 1
     
     if ceil(length/2) >= 129:
-        long_rep = '81'
+        long_rep = '8'
 
     length = str(hex(ceil(len(hex_str) / 2)))[2:]
 
-    if len(length) == 1:
+    if len(length) % 2 != 0:
         length = "0" + length
+    if long_rep != "":
+        long_rep = long_rep + str(hex(int(len(length) / 2))[2:])
+    
     DER = der_type + long_rep + length + hex_str
     return DER
     
@@ -38,49 +41,25 @@ def modinv(a, m):
     else:
         return x % m
 
-
-
-version = der_conv(0, "02")
-n = der_conv(6610823582647678679, "02")
-e = der_conv(65537, "02")
-d = der_conv(3920879998437651233, "02")
-p = der_conv(2530368937, "02")
-q = der_conv(2612592767, "02")
-exponent1 = der_conv(2013885953, "02")
-exponent2 = der_conv(1498103913, "02")
-coefficient = der_conv(1490876340, "02")
-
-print(version)
-print(n)
-print(e)
-print(d)
-print(p)
-print(q)
-print(exponent1)
-print(exponent2)
-print(coefficient)
-der =  version + n + e + d + p + q + exponent1 + exponent2 + coefficient
+p = 2530368937
+q = 2612592767
+e = 65537
+d = modinv(e, (p - 1) * (q - 1))
 
 
 
+ver = der_conv(0, '02')
+p_der = der_conv(p ,'02')
+q_der = der_conv(q,'02')
+e_der = der_conv(e,'02')
+n = der_conv(q * p,'02')
+d_der = der_conv(d, '02')
+exponent1 = der_conv(d % (p-1), '02')
+exponent2 = der_conv(d % (q-1),'02')
+coefficient = der_conv(modinv(q, p),'02')
 
-print(hex(ceil(len(der)/2))[2:])
-der = der_conv(int(der , 16), "30")
-print(der)
-print(base64.b64encode(codecs.decode(der, 'hex')))
-ver = der_conv(0)
-
-p = der_conv(139721121696950524826588106850589277149201407609721772094240512732263435522747938311240453050931930261483801083660740974606647762343797901776568952627044034430252415109426271529273025919247232149498325412099418785867055970264559033471714066901728022294156913563009971882292507967574638004022912842160046962763)
-q = der_conv(141482624370070397331659016840167171669762175617573550670131965177212458081250216130985545188965601581445995499595853199665045326236858265192627970970480636850683227427420000655754305398076045013588894161738893242561531526805416653594689480170103763171879023351810966896841177322118521251310975456956247827719)
-e = der_conv(65537)
-n = der_conv(q * p)
-d = der_conv(modinv(e, (p - 1) * (q - 1)))
-exponent1 = der_conv(d % (p-1))
-exponent2 = der_conv(d % (q-1))
-coefficient = der_conv(modinv(q, p))
-
-der = der_conv(ver + n + e + d + p + q + exponent1 + exponent2 + coefficient, '30')
-
+der = der_conv(int(ver + n + e_der + d_der + p_der + q_der + exponent1 + exponent2 + coefficient, 16), '30')
 
 print(der)
-print(base64.b64encode(der.encode()))
+print(base64.b64encode(codecs.decode(der, 'hex')).decode().replace('\n' ,""))
+print(der_conv(161863091426469985001358176493540241719547661391527305133576978132107887717901972545655469921112454527920502763568908799229786534949082469136818503316047702610019730504769581772016806386178260077157969035841180863069299401978140025225333279044855057641079117234814239380100022886557142183337228046784055073741, "02"))
